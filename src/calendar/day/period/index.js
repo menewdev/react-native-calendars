@@ -47,6 +47,10 @@ class Day extends Component {
   shouldComponentUpdate(nextProps) {
     const newMarkingStyle = this.getDrawingStyle(nextProps.marking);
 
+    if (this.props.theme.fadeOthers != nextProps.theme.fadeOthers) {
+      return true;
+    }
+
     if (!isEqual(this.markingStyle, newMarkingStyle)) {
       this.markingStyle = newMarkingStyle;
       return true;
@@ -198,7 +202,7 @@ class Day extends Component {
         <View style={this.style.wrapper}>
           {fillers}
           <View style={containerStyle}>
-            <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
+            <Text allowFontScaling={false} style={[textStyle, this.props.theme.fadeOthers ? {color: "red"} : {}]}>{String(this.props.children)}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
