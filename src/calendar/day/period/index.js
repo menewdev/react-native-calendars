@@ -14,7 +14,7 @@ import styleConstructor from './style';
 class Day extends Component {
   static propTypes = {
     // TODO: selected + disabled props should be removed
-    state: PropTypes.oneOf(['selected', 'disabled', 'today', '']),
+    state: PropTypes.oneOf(['selected', 'disabled', 'past', 'today', '']),
 
     // Specify theme properties to override specific styles for calendar parts. Default = {}
     theme: PropTypes.object,
@@ -47,7 +47,7 @@ class Day extends Component {
   shouldComponentUpdate(nextProps) {
     const newMarkingStyle = this.getDrawingStyle(nextProps.marking);
 
-    if (this.props.theme.fadeOthers != nextProps.theme.fadeOthers) {
+    if (this.props.state !== 'past' && this.props.theme.fadeOthers != nextProps.theme.fadeOthers) {
       return true;
     }
 
@@ -123,12 +123,37 @@ class Day extends Component {
     let rightFillerStyle = {};
     let fillerStyle = {};
     let fillers;
+    let theme = this.props.theme;
 
     if (this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
-      textStyle.push(this.style.todayText);
+      // textStyle.push(this.style.todayText);
+      if (this.props.day === 0) {
+        textStyle.push({ color: theme.fadeOthers ? theme.subSundayTextColor : theme.mainSundayTextColor });
+      } else if (this.props.day === 6) {
+        textStyle.push({ color: theme.fadeOthers ? theme.subSaturdayTextColor : theme.mainSaturdayTextColor });
+      } else {
+        textStyle.push({ color: theme.fadeOthers ? theme.subTextColor : theme.mainTextColor });
+      }
+    } else if (this.props.state === 'past') {
+      containerStyle.push({ backgroundColor: theme.pastBackgroundColor });
+      if (this.props.day === 0) {
+        textStyle.push({ color: theme.pastSundayTextColor });
+      } else if (this.props.day === 6) {
+        textStyle.push({ color: theme.pastSaturdayTextColor });
+      } else {
+        textStyle.push({ color: theme.pastTextColor });
+      }
+    } else {
+      if (this.props.day === 0) {
+        textStyle.push({ color: theme.fadeOthers ? theme.subSundayTextColor : theme.mainSundayTextColor });
+      } else if (this.props.day === 6) {
+        textStyle.push({ color: theme.fadeOthers ? theme.subSaturdayTextColor : theme.mainSaturdayTextColor });
+      } else {
+        textStyle.push({ color: theme.fadeOthers ? theme.subTextColor : theme.mainTextColor });
+      }
     }
 
     if (this.props.marking) {
@@ -152,7 +177,7 @@ class Day extends Component {
 
       if (flags.startingDay && !flags.endingDay) {
         leftFillerStyle = {
-          backgroundColor: this.theme.calendarBackground
+          backgroundColor: (this.props.state === 'past') ? theme.pastBackgroundColor : theme.calendarBackground
         };
         rightFillerStyle = {
           backgroundColor: flags.startingDay.color
@@ -162,7 +187,7 @@ class Day extends Component {
         });
       } else if (flags.endingDay && !flags.startingDay) {
         rightFillerStyle = {
-          backgroundColor: this.theme.calendarBackground
+          backgroundColor: (this.props.state === 'past') ? theme.pastBackgroundColor : theme.calendarBackground
         };
         leftFillerStyle = {
           backgroundColor: flags.endingDay.color
@@ -171,16 +196,22 @@ class Day extends Component {
           backgroundColor: flags.endingDay.color
         });
       } else if (flags.day) {
-        leftFillerStyle = {backgroundColor: flags.day.color};
-        rightFillerStyle = {backgroundColor: flags.day.color};
-        // #177 bug
-        fillerStyle = {backgroundColor: flags.day.color};
+        if (this.props.state === 'past') {
+          leftFillerStyle = { backgroundColor: theme.pastBackgroundColor };
+          rightFillerStyle = { backgroundColor: theme.pastBackgroundColor };
+          fillerStyle = { backgroundColor: theme.pastBackgroundColor };
+        } else {
+          leftFillerStyle = {backgroundColor: flags.day.color};
+          rightFillerStyle = {backgroundColor: flags.day.color};
+          // #177 bug
+          fillerStyle = {backgroundColor: flags.day.color};
+        }
       } else if (flags.endingDay && flags.startingDay) {
         rightFillerStyle = {
-          backgroundColor: this.theme.calendarBackground
+          backgroundColor: (this.props.state === 'past') ? theme.pastBackgroundColor : theme.calendarBackground
         };
         leftFillerStyle = {
-          backgroundColor: this.theme.calendarBackground
+          backgroundColor: (this.props.state === 'past') ? theme.pastBackgroundColor : theme.calendarBackground
         };
         containerStyle.push({
           backgroundColor: flags.endingDay.color
@@ -202,7 +233,7 @@ class Day extends Component {
         <View style={this.style.wrapper}>
           {fillers}
           <View style={containerStyle}>
-            <Text allowFontScaling={false} style={[textStyle, this.props.theme.fadeOthers ? {color: "red"} : {}]}>{String(this.props.children)}</Text>
+            <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>

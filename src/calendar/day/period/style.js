@@ -16,7 +16,7 @@ export default function styleConstructor(theme={}) {
     },
     base: {
       //borderWidth: 1,
-      width: 42,
+      width: 44,
       height: FILLER_HEIGHT,
       alignItems: 'center'
     },
