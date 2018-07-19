@@ -164,7 +164,7 @@ class Calendar extends Component {
     } else if (maxDate && !dateutils.isLTE(day, maxDate)) {
       state = 'disabled';
     } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
-      state = 'disabled';
+      // state = 'disabled';
     } else if (dateutils.sameDate(day, XDate())) {
       state = 'today';
     }

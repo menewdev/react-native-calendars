@@ -74,6 +74,18 @@ class CalendarHeader extends Component {
     return this.addMonth();
   }
 
+  renderWeekDayName = (day, idx) => {
+    let style = this.style.dayHeader
+    if (idx === 0) {
+      style = [style, { color: this.props.theme.mainSundayTextColor }];
+    } else if (idx === 6) {
+      style = [style, { color: this.props.theme.mainSaturdayTextColor }];
+    }
+    return (
+      <Text allowFontScaling={false} key={idx} accessible={false} style={style} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
+    );
+  }
+
   render() {
     let leftArrow = <View />;
     let rightArrow = <View />;
@@ -108,19 +120,25 @@ class CalendarHeader extends Component {
         </TouchableOpacity>
       );
     }
-    let indicator;
-    if (this.props.showIndicator) {
-      indicator = <ActivityIndicator />;
-    }
     return (
       <View>
         <View style={this.style.header}>
           {leftArrow}
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontSize: 9,
+                fontFamily: this.style.monthText.fontFamily,
+                color: this.props.theme.mainTextColor,
+                marginBottom: -3
+              }}
+            >
+              {this.props.month.toString('yyyy')}
+            </Text>
             <Text allowFontScaling={false} style={this.style.monthText} accessibilityTraits='header'>
               {this.props.month.toString(this.props.monthFormat)}
             </Text>
-            {indicator}
           </View>
           {rightArrow}
         </View>
@@ -128,9 +146,7 @@ class CalendarHeader extends Component {
           !this.props.hideDayNames &&
           <View style={this.style.week}>
             {this.props.weekNumbers && <Text allowFontScaling={false} style={this.style.dayHeader}></Text>}
-            {weekDaysNames.map((day, idx) => (
-              <Text allowFontScaling={false} key={idx} accessible={false} style={this.style.dayHeader} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
-            ))}
+            {weekDaysNames.map(this.renderWeekDayName)}
           </View>
         }
       </View>
