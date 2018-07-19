@@ -138,7 +138,6 @@ class Day extends Component {
         textStyle.push({ color: theme.fadeOthers ? theme.subTextColor : theme.mainTextColor });
       }
     } else if (this.props.state === 'past') {
-      containerStyle.push({ backgroundColor: theme.pastBackgroundColor });
       if (this.props.day === 0) {
         textStyle.push({ color: theme.pastSundayTextColor });
       } else if (this.props.day === 6) {
@@ -196,7 +195,8 @@ class Day extends Component {
           backgroundColor: flags.endingDay.color
         });
       } else if (flags.day) {
-        if (this.props.state === 'past') {
+        if (this.props.state === 'past' && !this.props.marking.selected) {
+          containerStyle.push({ backgroundColor: theme.pastBackgroundColor });
           leftFillerStyle = { backgroundColor: theme.pastBackgroundColor };
           rightFillerStyle = { backgroundColor: theme.pastBackgroundColor };
           fillerStyle = { backgroundColor: theme.pastBackgroundColor };
