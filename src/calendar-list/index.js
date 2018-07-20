@@ -195,6 +195,21 @@ class CalendarList extends Component {
     return diffMonths;
   }
 
+  onScrollEndDrag = (e) => {
+    if (Platform.OS === 'android' && !this.props.horizontal && this.props.pagingEnabled) {
+      // let offset = e.nativeEvent.contentOffset.y + e.nativeEvent.velocity.y * 300;
+      let offset = e.nativeEvent.contentOffset.y - e.nativeEvent.velocity.y * 100;
+      let height = this.props.calendarHeight;
+      let nearest = Math.round(offset / height);
+      if (nearest < 0) nearest = 0;
+      let max = this.props.pastScrollRange + this.props.futureScrollRange;
+      if (nearest > max) nearest = max;
+      let target = height * nearest;
+      // console.log("onScrollEndDrag", e.nativeEvent, nearest, target);
+      this.listView.scrollToOffset({offset: target, animated: true});
+    }
+  }
+
   render() {
     return (
       <FlatList
@@ -219,6 +234,7 @@ class CalendarList extends Component {
         initialScrollIndex={this.state.openDate ? this.getMonthIndex(this.state.openDate) : false}
         getItemLayout={this.getItemLayout}
         scrollsToTop={this.props.scrollsToTop}
+        onScrollEndDrag={this.onScrollEndDrag}
       />
     );
   }
