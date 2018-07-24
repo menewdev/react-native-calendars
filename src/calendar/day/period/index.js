@@ -234,6 +234,7 @@ class Day extends Component {
           {fillers}
           <View style={containerStyle}>
             <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
+            {this.props.marking.checked && <View style={{ width: 4, height: 4, marginTop: 1, borderRadius: 2, backgroundColor: "white" }}/>}
           </View>
         </View>
       </TouchableWithoutFeedback>

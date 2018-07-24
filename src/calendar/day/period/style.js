@@ -36,7 +36,7 @@ export default function styleConstructor(theme={}) {
       flex: 1
     },
     text: {
-      marginTop: 12,
+      marginTop: 10,
       fontSize: appStyle.textDayFontSize,
       fontFamily: appStyle.textDayFontFamily,
       fontWeight: '300',
