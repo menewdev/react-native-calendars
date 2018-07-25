@@ -47,12 +47,12 @@ class Day extends Component {
   shouldComponentUpdate(nextProps) {
     const newMarkingStyle = this.getDrawingStyle(nextProps.marking);
 
-    if (this.props.state !== 'past' && this.props.theme.fadeOthers != nextProps.theme.fadeOthers) {
+    if (!isEqual(this.markingStyle, newMarkingStyle)) {
+      this.markingStyle = newMarkingStyle;
       return true;
     }
 
-    if (!isEqual(this.markingStyle, newMarkingStyle)) {
-      this.markingStyle = newMarkingStyle;
+    if (this.props.state !== 'past' && this.props.theme.fadeOthers != nextProps.theme.fadeOthers) {
       return true;
     }
 
