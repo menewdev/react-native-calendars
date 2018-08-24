@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {
   TouchableWithoutFeedback,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 import {shouldUpdate} from '../../../component-updater';
 import isEqual from 'lodash.isequal';
@@ -234,7 +235,7 @@ class Day extends Component {
           {fillers}
           <View style={containerStyle}>
             <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-            {this.props.marking.checked && <View style={{ width: 4, height: 4, marginTop: 1, borderRadius: 2, backgroundColor: "white" }}/>}
+            {this.props.marking.checked && <Image source={require("../../img/calender_check.png")} style={{ width: 6, height: 5, marginTop: 2 }} />}
           </View>
         </View>
       </TouchableWithoutFeedback>
