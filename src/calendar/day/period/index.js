@@ -229,6 +229,7 @@ class Day extends Component {
 
     return (
       <TouchableWithoutFeedback
+        testID={this.props.testID}
         onPress={this.onDayPress}
         onLongPress={this.onDayLongPress}>
         <View style={this.style.wrapper}>

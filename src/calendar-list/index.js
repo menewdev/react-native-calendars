@@ -42,7 +42,10 @@ class CalendarList extends Component {
     horizontal: PropTypes.bool,
     // Dynamic calendar height
     calendarHeight: PropTypes.number,
-  };
+
+    // Style for the List item (the calendar)
+    calendarStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array])
+  }
 
   static defaultProps = {
     horizontal: false,
@@ -183,7 +186,15 @@ class CalendarList extends Component {
   }
 
   renderCalendar({item}) {
-    return (<CalendarListItem item={item} calendarHeight={this.props.calendarHeight} calendarWidth={this.props.horizontal ? this.props.calendarWidth : undefined  } {...this.props} />);
+    return (
+      <CalendarListItem 
+        item={item} 
+        calendarHeight={this.props.calendarHeight} 
+        calendarWidth={this.props.horizontal ? this.props.calendarWidth : undefined} 
+        {...this.props} 
+        style={this.props.calendarStyle}
+      />
+    );
   }
 
   getItemLayout(data, index) {
@@ -217,7 +228,7 @@ class CalendarList extends Component {
         ref={(c) => this.listView = c}
         //scrollEventThrottle={1000}
         style={[this.style.container, this.props.style]}
-        initialListSize={this.pastScrollRange + this.futureScrollRange + 1}
+        initialListSize={this.props.pastScrollRange + this.props.futureScrollRange + 1}
         data={this.state.rows}
         //snapToAlignment='start'
         //snapToInterval={this.calendarHeight}
@@ -229,7 +240,7 @@ class CalendarList extends Component {
         renderItem={this.renderCalendarBound}
         showsVerticalScrollIndicator={this.props.showScrollIndicator}
         showsHorizontalScrollIndicator={this.props.showScrollIndicator}
-        scrollEnabled={this.props.scrollingEnabled}
+        scrollEnabled={this.props.scrollEnabled}
         keyExtractor={(item, index) => String(index)}
         initialScrollIndex={this.state.openDate ? this.getMonthIndex(this.state.openDate) : false}
         getItemLayout={this.getItemLayout}
