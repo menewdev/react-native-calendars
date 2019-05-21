@@ -158,7 +158,12 @@ class Day extends Component {
 
     if (this.props.marking) {
       containerStyle.push({
-        borderRadius: 22
+        borderRadius: 22,
+        // mod: morooka
+        // https://github.com/wix/react-native-calendars/pull/728
+        // 本家でおきている不具合の対応
+        // AndroidでborderRadiusが効かなくなる。マージされてないため直接修正
+        overflow: 'hidden'
       });
 
       const flags = this.markingStyle;
@@ -229,6 +234,7 @@ class Day extends Component {
 
     return (
       <TouchableWithoutFeedback
+        testID={this.props.testID}
         onPress={this.onDayPress}
         onLongPress={this.onDayLongPress}>
         <View style={this.style.wrapper}>
